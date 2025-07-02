@@ -1,11 +1,11 @@
 {
   "arbitrum-one": {
     "Stele": {
-      "address": "0x9e977d928f33a949c8e0523292ffdfd47f1d0246",
-      "startBlock": 353333710
+      "address": "0xFBeFb660a91584afB282e2aE8A689765c66a8Fb3",
+      "startBlock": 353511653
     },
     "SteleGovernor": {
-      "address": "0x5E6858B551930438c89D70D938Cd032F67BAF7ae"
+      "address": "0x0940B5dbc3971065e3766c58fdB86a631E631481"
     }
   }
 }
