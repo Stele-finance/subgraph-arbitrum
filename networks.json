@@ -3,6 +3,9 @@
     "Stele": {
       "address": "0x9e977d928f33a949c8e0523292ffdfd47f1d0246",
       "startBlock": 353333710
+    },
+    "SteleGovernor": {
+      "address": "0x5E6858B551930438c89D70D938Cd032F67BAF7ae"
     }
   }
 }
