@@ -356,8 +356,6 @@ export function handleJoin(event: JoinEvent): void {
   investor.endTime = challenge.endTime
   investor.updatedAtTimestamp = event.block.timestamp
   investor.investor = event.params.user
-  investor.seedMoneyUSD = BigDecimal.fromString(event.params.seedMoney.toString())
-  investor.currentUSD = investor.seedMoneyUSD  // At join time, current value equals seed money
   investor.tokens = [stele.usdToken]  
   
   // Handle tokensDecimals properly - fetch decimals and provide fallback
@@ -368,6 +366,8 @@ export function handleJoin(event: JoinEvent): void {
     let decimalDivisor = exponentToBigDecimal(usdTokenDecimals)
     let formattedAmount = BigDecimal.fromString(event.params.seedMoney.toString()).div(decimalDivisor)
     investor.tokensAmount = [formattedAmount]
+    // Use the same decimal formatted amount for seedMoneyUSD
+    investor.seedMoneyUSD = formattedAmount
   } else {
     log.error('[JOIN] Failed to get decimals for USD token, using default 18: {}', [stele.usdToken.toHexString()])
     investor.tokensDecimals = [BigInt.fromI32(18)] // default to 18 decimals
@@ -375,7 +375,10 @@ export function handleJoin(event: JoinEvent): void {
     let decimalDivisor = exponentToBigDecimal(BigInt.fromI32(18))
     let formattedAmount = BigDecimal.fromString(event.params.seedMoney.toString()).div(decimalDivisor)
     investor.tokensAmount = [formattedAmount]
+    // Use the same decimal formatted amount for seedMoneyUSD
+    investor.seedMoneyUSD = formattedAmount
   }
+  investor.currentUSD = investor.seedMoneyUSD  // At join time, current value equals seed money
   
   // Handle tokensSymbols properly - provide fallback
   let usdTokenSymbol = fetchTokenSymbol(stele.usdToken, event.block.timestamp)

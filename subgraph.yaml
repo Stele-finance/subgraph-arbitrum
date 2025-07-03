@@ -8,9 +8,9 @@ dataSources:
     name: Stele
     network: arbitrum-one
     source:
-      address: "0xFBeFb660a91584afB282e2aE8A689765c66a8Fb3"
+      address: "0xe96dbe76143c3cad02ed03db53f8cdf67389ab0a"
       abi: Stele
-      startBlock: 353511653
+      startBlock: 353818685
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.9
@@ -72,9 +72,9 @@ dataSources:
     name: SteleGovernor
     network: arbitrum-one
     source:
-      address: "0x0940B5dbc3971065e3766c58fdB86a631E631481"
+      address: "0x7909ed39e1836cB4050dbD21F66b5113FF121cc4"
       abi: SteleGovernor
-      startBlock: 353511223
+      startBlock: 353818493
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.9
