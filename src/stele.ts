@@ -24,8 +24,6 @@ import {
   InvestableToken,
   Stele,
   Challenge,
-  ChallengeSnapshot,
-  ActiveChallengesSnapshot,
   Investor,
   ActiveChallenges,
   SteleTokenBonus,
@@ -34,8 +32,7 @@ import {
 } from "../generated/schema"
 import { BigInt, BigDecimal, Bytes, log, Address } from "@graphprotocol/graph-ts"
 import { ChallengeType, getDuration, STELE_ADDRESS } from "./utils/constants"
-import { ERC20 } from "../generated/Stele/ERC20"
-import { activeChallengesSnapshot, challengeSnapshot, investorSnapshot } from "./utils/snapshots"
+import { activeChallengesSnapshot, activeChallengesWeeklySnapshot, challengeSnapshot, investorSnapshot } from "./utils/snapshots"
 import { getCachedEthPriceUSD, getCachedTokenPriceETH, getTokenPriceETH } from "./utils/pricing"
 import { getInvestorID } from "./utils/investor"
 import { fetchTokenDecimals, fetchTokenSymbol } from "./utils/token"
@@ -287,6 +284,7 @@ export function handleCreate(event: CreateEvent): void {
   }
   activeChallenges.save()
   activeChallengesSnapshot(event)
+  activeChallengesWeeklySnapshot(event)
 
   // Initialize ranking for the new challenge with default values
   let ranking = new Ranking(event.params.challengeId.toString())
@@ -423,6 +421,7 @@ export function handleJoin(event: JoinEvent): void {
   }  
   activeChallenges.save()
   activeChallengesSnapshot(event)
+  activeChallengesWeeklySnapshot(event)
 }
 
 export function handleSwap(event: SwapEvent): void {
@@ -640,7 +639,7 @@ export function handleSwap(event: SwapEvent): void {
   investor.tokensSymbols = tokensSymbols
   investor.currentUSD = totalPriceUSD.truncate(5)
   investor.profitUSD = investor.currentUSD.minus(investor.seedMoneyUSD).truncate(5)
-  investor.profitRatio = investor.profitUSD.div(investor.seedMoneyUSD).truncate(5)
+  investor.profitRatio = investor.profitUSD.div(investor.seedMoneyUSD).times(BigDecimal.fromString("100")).truncate(5)
   investor.save()
 
   investorSnapshot(event.params.challengeId, event.params.user, event)
@@ -769,7 +768,7 @@ export function handleRegister(event: RegisterEvent): void {
   investor.tokensSymbols = tokensSymbols
   investor.currentUSD = totalPriceUSD.truncate(5)
   investor.profitUSD = investor.currentUSD.minus(investor.seedMoneyUSD).truncate(5)
-  investor.profitRatio = investor.profitUSD.div(investor.seedMoneyUSD).truncate(5)
+  investor.profitRatio = investor.profitUSD.div(investor.seedMoneyUSD).times(BigDecimal.fromString("100")).truncate(5)
   investor.isRegistered = true
   investor.save()
   investorSnapshot(event.params.challengeId, event.params.user, event)

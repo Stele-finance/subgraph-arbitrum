@@ -206,8 +206,40 @@ type ActiveChallengesSnapshot @entity(immutable: false) {
   one_year_rewardAmountUSD: BigInt!
 }
 
+type ActiveChallengesWeeklySnapshot @entity(immutable: false) {
+  id: ID!
+  timestamp: BigInt!
+  totalParticipants: BigInt!
+  totalRewards: BigInt!
+  one_week_investorCounter: BigInt!
+  one_week_rewardAmountUSD: BigInt!
+  one_month_investorCounter: BigInt!
+  one_month_rewardAmountUSD: BigInt!
+  three_month_investorCounter: BigInt!
+  three_month_rewardAmountUSD: BigInt!
+  six_month_investorCounter: BigInt!
+  six_month_rewardAmountUSD: BigInt!
+  one_year_investorCounter: BigInt!
+  one_year_rewardAmountUSD: BigInt!
+}
+
 type InvestorSnapshot @entity(immutable: false) {
   # format: <challenge id>-<investor address>
+  id: ID!
+  challengeId: String!
+  timestamp: BigInt!
+  investor: Bytes!
+  seedMoneyUSD: BigDecimal!
+  currentUSD: BigDecimal!
+  tokens: [Bytes!]!
+  tokensAmount: [BigDecimal!]!
+  tokensDecimals: [BigInt!]!
+  tokensSymbols: [String!]!
+  profitRatio: BigDecimal!
+}
+
+type InvestorWeeklySnapshot @entity(immutable: false) {
+  # format: <challenge id>-<investor address>-<week id>
   id: ID!
   challengeId: String!
   timestamp: BigInt!
