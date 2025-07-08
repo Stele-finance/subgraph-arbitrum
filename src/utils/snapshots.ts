@@ -3,6 +3,7 @@ import {
   Stele,
   Challenge,
   ChallengeSnapshot,
+  ChallengeWeeklySnapshot,
   ActiveChallengesSnapshot,
   ActiveChallengesWeeklySnapshot,
   Investor,
@@ -34,6 +35,29 @@ export function challengeSnapshot(
   challengeSnapshot.topUsers = challenge.topUsers
   challengeSnapshot.score = challenge.score
   challengeSnapshot.save()
+}
+
+export function challengeWeeklySnapshot(
+  challengeId: string,
+  event: ethereum.Event
+): void {
+  let challenge = Challenge.load(challengeId)
+  if (!challenge) return
+
+  let timestamp = event.block.timestamp.toI32()
+  let weekID = timestamp / (86400 * 7) // rounded to 7-day intervals
+
+  let challengeWeeklySnapshot = ChallengeWeeklySnapshot.load(challengeId + "-" + weekID.toString())
+  if (challengeWeeklySnapshot == null) {
+    challengeWeeklySnapshot = new ChallengeWeeklySnapshot(challengeId + "-" + weekID.toString())
+  }
+  challengeWeeklySnapshot.challengeId = challenge.challengeId
+  challengeWeeklySnapshot.timestamp = event.block.timestamp
+  challengeWeeklySnapshot.investorCount = challenge.investorCounter
+  challengeWeeklySnapshot.rewardAmountUSD = challenge.rewardAmountUSD
+  challengeWeeklySnapshot.topUsers = challenge.topUsers
+  challengeWeeklySnapshot.score = challenge.score
+  challengeWeeklySnapshot.save()
 }
 
 export function activeChallengesSnapshot(event: ethereum.Event): void {
@@ -95,7 +119,7 @@ export function activeChallengesWeeklySnapshot(event: ethereum.Event): void {
   }
 
   let timestamp = event.block.timestamp.toI32()
-  let weekID = timestamp / (86400 * 7) // Round by 7-day units
+  let weekID = timestamp / (86400 * 7) // rounded to 7-day intervals
 
   let activeChallengesWeeklySnapshot = ActiveChallengesWeeklySnapshot.load(weekID.toString())
   if (activeChallengesWeeklySnapshot == null) {
@@ -182,7 +206,7 @@ export function investorWeeklySnapshot(
   let investor = Investor.load(investorId)
   if (!investor) return 
 
-  let weekID = event.block.timestamp.toI32() / (86400 * 7) // Round by 7-day units
+  let weekID = event.block.timestamp.toI32() / (86400 * 7) // rounded to 7-day intervals
 
   // Always create new snapshot for each event
   let investorWeeklySnapshot = InvestorWeeklySnapshot.load(investorId + "-" + weekID.toString())

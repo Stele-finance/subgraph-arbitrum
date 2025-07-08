@@ -189,6 +189,16 @@ type ChallengeSnapshot @entity(immutable: false) {
   score: [BigInt!]!
 }
 
+type ChallengeWeeklySnapshot @entity(immutable: false) {
+  id: ID!
+  challengeId: String!
+  timestamp: BigInt!
+  investorCount: BigInt!
+  rewardAmountUSD: BigInt!
+  topUsers: [Bytes!]!
+  score: [BigInt!]!
+}
+
 type ActiveChallengesSnapshot @entity(immutable: false) {
   id: ID!
   timestamp: BigInt!
@@ -224,7 +234,7 @@ type ActiveChallengesWeeklySnapshot @entity(immutable: false) {
 }
 
 type InvestorSnapshot @entity(immutable: false) {
-  # format: <challenge id>-<investor address>
+  # format: <challenge id>-<investor address>-<day id>
   id: ID!
   challengeId: String!
   timestamp: BigInt!

@@ -32,7 +32,7 @@ import {
 } from "../generated/schema"
 import { BigInt, BigDecimal, Bytes, log, Address } from "@graphprotocol/graph-ts"
 import { ChallengeType, getDuration, STELE_ADDRESS } from "./utils/constants"
-import { activeChallengesSnapshot, activeChallengesWeeklySnapshot, challengeSnapshot, investorSnapshot } from "./utils/snapshots"
+import { activeChallengesSnapshot, activeChallengesWeeklySnapshot, challengeSnapshot, challengeWeeklySnapshot, investorSnapshot, investorWeeklySnapshot } from "./utils/snapshots"
 import { getCachedEthPriceUSD, getCachedTokenPriceETH, getTokenPriceETH } from "./utils/pricing"
 import { getInvestorID } from "./utils/investor"
 import { fetchTokenDecimals, fetchTokenSymbol } from "./utils/token"
@@ -232,6 +232,7 @@ export function handleCreate(event: CreateEvent): void {
 
   // Use the challengeSnapshot helper function instead of duplicating logic
   challengeSnapshot(event.params.challengeId.toString(), event)
+  challengeWeeklySnapshot(event.params.challengeId.toString(), event)
 
   let activeChallenges = ActiveChallenges.load(Bytes.fromI32(0))
   if (activeChallenges == null) {
@@ -346,6 +347,7 @@ export function handleJoin(event: JoinEvent): void {
   challenge.save()
 
   challengeSnapshot(event.params.challengeId.toString(), event)
+  challengeWeeklySnapshot(event.params.challengeId.toString(), event)
 
   // Create new Investor and InvestorSnapshot
   let investor = new Investor(getInvestorID(event.params.challengeId, event.params.user))
@@ -389,6 +391,7 @@ export function handleJoin(event: JoinEvent): void {
   investor.save()
 
   investorSnapshot(event.params.challengeId, event.params.user, event)
+  investorWeeklySnapshot(event.params.challengeId, event.params.user, event)
 
   let activeChallenges = ActiveChallenges.load(Bytes.fromI32(0))
   if (activeChallenges == null) {
@@ -643,6 +646,7 @@ export function handleSwap(event: SwapEvent): void {
   investor.save()
 
   investorSnapshot(event.params.challengeId, event.params.user, event)
+  investorWeeklySnapshot(event.params.challengeId, event.params.user, event)
 }
 
 export function handleRegister(event: RegisterEvent): void {
@@ -772,6 +776,7 @@ export function handleRegister(event: RegisterEvent): void {
   investor.isRegistered = true
   investor.save()
   investorSnapshot(event.params.challengeId, event.params.user, event)
+  investorWeeklySnapshot(event.params.challengeId, event.params.user, event)
 
   // Debug: Log the performance value from Register event
   log.info('[REGISTER DEBUG] Register event - User: {}, Performance: {}', [
