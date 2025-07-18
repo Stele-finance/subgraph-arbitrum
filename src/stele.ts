@@ -343,7 +343,7 @@ export function handleJoin(event: JoinEvent): void {
     return
   }
   challenge.investorCounter = challenge.investorCounter.plus(BigInt.fromI32(1))
-  challenge.rewardAmountUSD = challenge.rewardAmountUSD.plus(challenge.entryFee)
+  challenge.rewardAmountUSD = challenge.rewardAmountUSD.plus(stele.entryFee)
   challenge.save()
 
   challengeSnapshot(event.params.challengeId.toString(), event)
@@ -401,23 +401,23 @@ export function handleJoin(event: JoinEvent): void {
   switch (challenge.challengeType) {
     case ChallengeType.OneWeek:
       activeChallenges.one_week_investorCounter = activeChallenges.one_week_investorCounter.plus(BigInt.fromI32(1))
-      activeChallenges.one_week_rewardAmountUSD = activeChallenges.one_week_rewardAmountUSD.plus(challenge.entryFee)
+      activeChallenges.one_week_rewardAmountUSD = activeChallenges.one_week_rewardAmountUSD.plus(stele.entryFee)
       break;
     case ChallengeType.OneMonth:
       activeChallenges.one_month_investorCounter = activeChallenges.one_month_investorCounter.plus(BigInt.fromI32(1))
-      activeChallenges.one_month_rewardAmountUSD = activeChallenges.one_month_rewardAmountUSD.plus(challenge.entryFee)
+      activeChallenges.one_month_rewardAmountUSD = activeChallenges.one_month_rewardAmountUSD.plus(stele.entryFee)
       break;
     case ChallengeType.ThreeMonths:
       activeChallenges.three_month_investorCounter = activeChallenges.three_month_investorCounter.plus(BigInt.fromI32(1))
-      activeChallenges.three_month_rewardAmountUSD = activeChallenges.three_month_rewardAmountUSD.plus(challenge.entryFee)
+      activeChallenges.three_month_rewardAmountUSD = activeChallenges.three_month_rewardAmountUSD.plus(stele.entryFee)
       break;
     case ChallengeType.SixMonths:
       activeChallenges.six_month_investorCounter = activeChallenges.six_month_investorCounter.plus(BigInt.fromI32(1))
-      activeChallenges.six_month_rewardAmountUSD = activeChallenges.six_month_rewardAmountUSD.plus(challenge.entryFee)
+      activeChallenges.six_month_rewardAmountUSD = activeChallenges.six_month_rewardAmountUSD.plus(stele.entryFee)
       break;
     case ChallengeType.OneYear:
       activeChallenges.one_year_investorCounter = activeChallenges.one_year_investorCounter.plus(BigInt.fromI32(1))
-      activeChallenges.one_year_rewardAmountUSD = activeChallenges.one_year_rewardAmountUSD.plus(challenge.entryFee)
+      activeChallenges.one_year_rewardAmountUSD = activeChallenges.one_year_rewardAmountUSD.plus(stele.entryFee)
       break;
     default:
       break;
