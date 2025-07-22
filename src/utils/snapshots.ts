@@ -1,6 +1,5 @@
-import { Address, BigDecimal, BigInt, Bytes, ethereum, log } from '@graphprotocol/graph-ts'
+import { Address, BigInt, Bytes, ethereum } from '@graphprotocol/graph-ts'
 import {
-  Stele,
   Challenge,
   ChallengeSnapshot,
   ChallengeWeeklySnapshot,
@@ -11,7 +10,6 @@ import {
   InvestorWeeklySnapshot,
   ActiveChallenges
 } from '../../generated/schema'
-import { STELE_ADDRESS } from './constants'
 import { getInvestorID } from './investor'
 
 export function challengeSnapshot(
@@ -22,7 +20,7 @@ export function challengeSnapshot(
   if (!challenge) return
 
   let timestamp = event.block.timestamp.toI32()
-  let dayID = timestamp / 86400 // rounded
+  let dayID = Math.floor(timestamp / 86400) // explicit floor division
 
   let challengeSnapshot = ChallengeSnapshot.load(challengeId + "-" + dayID.toString())
   if (challengeSnapshot == null) {
@@ -45,7 +43,7 @@ export function challengeWeeklySnapshot(
   if (!challenge) return
 
   let timestamp = event.block.timestamp.toI32()
-  let weekID = timestamp / (86400 * 7) // rounded to 7-day intervals
+  let weekID = Math.floor(timestamp / (86400 * 7)) // explicit floor division
 
   let challengeWeeklySnapshot = ChallengeWeeklySnapshot.load(challengeId + "-" + weekID.toString())
   if (challengeWeeklySnapshot == null) {
@@ -67,7 +65,7 @@ export function activeChallengesSnapshot(event: ethereum.Event): void {
   }
 
   let timestamp = event.block.timestamp.toI32()
-  let dayID = timestamp / 86400 // rounded
+  let dayID = Math.floor(timestamp / 86400) // explicit floor division
 
   let activeChallengesSnapshot = ActiveChallengesSnapshot.load(dayID.toString())
   if (activeChallengesSnapshot == null) {
@@ -119,7 +117,7 @@ export function activeChallengesWeeklySnapshot(event: ethereum.Event): void {
   }
 
   let timestamp = event.block.timestamp.toI32()
-  let weekID = timestamp / (86400 * 7) // rounded to 7-day intervals
+  let weekID = Math.floor(timestamp / (86400 * 7)) // explicit floor division
 
   let activeChallengesWeeklySnapshot = ActiveChallengesWeeklySnapshot.load(weekID.toString())
   if (activeChallengesWeeklySnapshot == null) {
@@ -175,9 +173,9 @@ export function investorSnapshot(
   let investor = Investor.load(investorId)
   if (!investor) return 
 
-  let dayID = event.block.timestamp.toI32() / 86400 // rounded
+  let dayID = Math.floor(event.block.timestamp.toI32() / 86400) // explicit floor division
 
-  // Always create new snapshot for each event
+  // Update existing snapshot if it already exists for the same day
   let investorSnapshot = InvestorSnapshot.load(investorId + "-" + dayID.toString())
   if (investorSnapshot == null) {
     investorSnapshot = new InvestorSnapshot(investorId + "-" + dayID.toString())
@@ -206,9 +204,9 @@ export function investorWeeklySnapshot(
   let investor = Investor.load(investorId)
   if (!investor) return 
 
-  let weekID = event.block.timestamp.toI32() / (86400 * 7) // rounded to 7-day intervals
+  let weekID = Math.floor(event.block.timestamp.toI32() / (86400 * 7)) // explicit floor division
 
-  // Always create new snapshot for each event
+  // Update existing snapshot if it already exists for the same week
   let investorWeeklySnapshot = InvestorWeeklySnapshot.load(investorId + "-" + weekID.toString())
   if (investorWeeklySnapshot == null) {
     investorWeeklySnapshot = new InvestorWeeklySnapshot(investorId + "-" + weekID.toString())
