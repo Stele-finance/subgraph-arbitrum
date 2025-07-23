@@ -963,4 +963,5 @@ export function handleSteleTokenBonus(event: SteleTokenBonusEvent): void {
   steleTokenBonus.blockNumber = event.block.number
   steleTokenBonus.blockTimestamp = event.block.timestamp
   steleTokenBonus.transactionHash = event.transaction.hash
+  steleTokenBonus.save()
 }
