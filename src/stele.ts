@@ -31,7 +31,7 @@ import {
   TotalRanking
 } from "../generated/schema"
 import { BigInt, BigDecimal, Bytes, log, Address } from "@graphprotocol/graph-ts"
-import { ChallengeType, getDuration, STELE_ADDRESS } from "./utils/constants"
+import { ChallengeType, getDuration, STELE_ADDRESS, USDC_DECIMAL } from "./utils/constants"
 import { activeChallengesSnapshot, activeChallengesWeeklySnapshot, challengeSnapshot, challengeWeeklySnapshot, investorSnapshot, investorWeeklySnapshot } from "./utils/snapshots"
 import { getCachedEthPriceUSD, getCachedTokenPriceETH, getTokenPriceETH } from "./utils/pricing"
 import { getInvestorID } from "./utils/investor"
@@ -730,21 +730,8 @@ export function handleRegister(event: RegisterEvent): void {
     tokensSymbols.push(symbol || "UNKNOWN")
   }
 
-  // get total tokens price in USD with sum of tokens
-  let totalPriceUSD = BigDecimal.fromString("0")
-  for (let i = 0; i < tokenAddresses.length; i++) {
-    let token = tokenAddresses[i]
-    let deAmount = tokensDeAmount[i]  // Use decimal amount for price calculation
-    let tokenPriceETH = getTokenPriceETH(Address.fromBytes(token), event.block.timestamp)
-    if (tokenPriceETH === null) {
-      log.debug('[REGISTER] User {} in challenge {} Failed to get price ETH for token: {}', 
-        [event.params.user.toHexString(), event.params.challengeId.toString(), token.toHexString()])
-      continue
-    }
-    const amountETH = deAmount.times(tokenPriceETH)
-    const amountUSD = amountETH.times(ethPriceInUSD)
-    totalPriceUSD = totalPriceUSD.plus(amountUSD)
-  }
+  // get total price in USD from performance value (USDC with 6 decimals)
+  let totalPriceUSD = event.params.performance.toBigDecimal().div(USDC_DECIMAL)
   
   // Debug: Log the token amounts being stored
   log.info('[REGISTER DEBUG] User {} in challenge {} - Portfolio update:', [
