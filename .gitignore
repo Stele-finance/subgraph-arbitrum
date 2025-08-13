@@ -6,6 +6,8 @@ generated/
 node_modules/
 jspm_packages/
 
+package-lock.json
+
 # Logs
 logs
 *.log
