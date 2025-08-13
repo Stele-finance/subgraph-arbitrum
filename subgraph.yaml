@@ -8,9 +8,9 @@ dataSources:
     name: Stele
     network: arbitrum-one
     source:
-      address: "0xB575c529037b6f7312faaa79B60D190051490546"
+      address: "0x566D1769B3f66372E94fD18F59c757BCEc6efb8a"
       abi: Stele
-      startBlock: 367894094
+      startBlock: 367903241
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.9
@@ -124,9 +124,9 @@ dataSources:
     name: StelePerformanceNFT
     network: arbitrum-one
     source:
-      address: "0x9323cc832eb3b1398458a7e6f7e319ab98b4391e"
+      address: "0x71c24377e7f24b6d822c9dad967ebc77c04667b5"
       abi: StelePerformanceNFT
-      startBlock: 367894107
+      startBlock: 367903253
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.9
