@@ -223,7 +223,6 @@ export function handleCreate(event: CreateEvent): void {
     challenge.seedMoney = event.params.seedMoney
     challenge.entryFee = event.params.entryFee
   }
-  challenge.maxAssets = BigInt.fromI32(event.params.maxAssets)
   challenge.rewardAmountUSD = BigInt.fromI32(0)
   challenge.isActive = true
   challenge.topUsers = []

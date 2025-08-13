@@ -233,6 +233,19 @@ type ActiveChallengesWeeklySnapshot @entity(immutable: false) {
   one_year_rewardAmountUSD: BigInt!
 }
 
+# Performance NFT Entities
+type PerformanceNFT @entity(immutable: true) {
+  id: ID!                    # tokenId as string
+  tokenId: BigInt!           # uint256
+  challengeId: BigInt!       # uint256
+  user: Bytes!               # address
+  rank: Int!                 # uint8
+  returnRate: BigInt!        # uint256 (raw)
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
 type InvestorSnapshot @entity(immutable: false) {
   # format: <challenge id>-<investor address>-<day id>
   id: ID!
