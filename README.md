@@ -25,11 +25,27 @@ This project provides a GraphQL API that enables indexing and querying data from
 
 ### Deployment Commands
 ```bash
-# Generate code and build
+# Code generation and build
 graph codegen && graph build
 
-# Deploy to The Graph Studio
+# Individual execution
+npm run codegen
+npm run build
+```
+
+### Deploy Commands
+```bash
+# Main deployment
 graph deploy stele-arbit
+
+# Or using npm scripts
+npm run deploy
+
+# Local development environment
+npm run create-local
+npm run deploy-local
+npm run remove-local
+```
 
 ## Schema Structure
 
