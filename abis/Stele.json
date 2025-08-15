@@ -44,7 +44,7 @@
       },
       {
         "indexed": false,
-        "internalType": "enum ChallengeType",
+        "internalType": "enum IStele.ChallengeType",
         "name": "challengeType",
         "type": "uint8"
       },
@@ -382,7 +382,7 @@
         "type": "uint256"
       },
       {
-        "internalType": "enum ChallengeType",
+        "internalType": "enum IStele.ChallengeType",
         "name": "challengeType",
         "type": "uint8"
       },
@@ -423,7 +423,7 @@
   {
     "inputs": [
       {
-        "internalType": "enum ChallengeType",
+        "internalType": "enum IStele.ChallengeType",
         "name": "challengeType",
         "type": "uint8"
       }
@@ -454,6 +454,60 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "challengeId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getChallengeInfo",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "_id",
+        "type": "uint256"
+      },
+      {
+        "internalType": "enum IStele.ChallengeType",
+        "name": "_challengeType",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_startTime",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_endTime",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_totalRewards",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_seedMoney",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_entryFee",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint32",
+        "name": "_totalUsers",
+        "type": "uint32"
       }
     ],
     "stateMutability": "view",
@@ -586,7 +640,7 @@
   {
     "inputs": [
       {
-        "internalType": "enum ChallengeType",
+        "internalType": "enum IStele.ChallengeType",
         "name": "",
         "type": "uint8"
       }
