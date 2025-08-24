@@ -3,7 +3,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_wethToken",
+        "name": "_weth9",
         "type": "address"
       },
       {
@@ -70,11 +70,37 @@
       {
         "indexed": false,
         "internalType": "uint256",
+        "name": "newBonus",
+        "type": "uint256"
+      }
+    ],
+    "name": "CreateBonusUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
         "name": "newEntryFee",
         "type": "uint256"
       }
     ],
     "name": "EntryFee",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newBonus",
+        "type": "uint256"
+      }
+    ],
+    "name": "GetRewardsBonusUpdated",
     "type": "event"
   },
   {
@@ -107,12 +133,25 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "uint256",
+        "name": "newBonus",
+        "type": "uint256"
+      }
+    ],
+    "name": "JoinBonusUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "uint8",
-        "name": "newMaxAssets",
+        "name": "newMaxTokens",
         "type": "uint8"
       }
     ],
-    "name": "MaxAssets",
+    "name": "MaxTokens",
     "type": "event"
   },
   {
@@ -254,7 +293,7 @@
       {
         "indexed": false,
         "internalType": "uint8",
-        "name": "maxAssets",
+        "name": "maxTokens",
         "type": "uint8"
       },
       {
@@ -328,25 +367,25 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "fromAsset",
+        "name": "tokenIn",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "address",
-        "name": "toAsset",
+        "name": "tokenOut",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "fromAmount",
+        "name": "tokenInAmount",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "toAmount",
+        "name": "tokenOutAmount",
         "type": "uint256"
       }
     ],
@@ -421,6 +460,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "createBonus",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "enum IStele.ChallengeType",
@@ -431,19 +483,6 @@
     "name": "createChallenge",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "createChallengeBonus",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -612,6 +651,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "joinBonus",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -622,19 +674,6 @@
     "name": "joinChallenge",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "joinChallengeBonus",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -658,7 +697,7 @@
   },
   {
     "inputs": [],
-    "name": "maxAssets",
+    "name": "maxTokens",
     "outputs": [
       {
         "internalType": "uint8",
@@ -789,6 +828,19 @@
     "inputs": [
       {
         "internalType": "uint256",
+        "name": "_createBonus",
+        "type": "uint256"
+      }
+    ],
+    "name": "setCreateBonus",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
         "name": "_entryFee",
         "type": "uint256"
       }
@@ -801,12 +853,38 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "_getRewardsBonus",
+        "type": "uint256"
+      }
+    ],
+    "name": "setGetRewardsBonus",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_joinBonus",
+        "type": "uint256"
+      }
+    ],
+    "name": "setJoinBonus",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint8",
-        "name": "_maxAssets",
+        "name": "_maxTokens",
         "type": "uint8"
       }
     ],
-    "name": "setMaxAssets",
+    "name": "setMaxTokens",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -885,12 +963,12 @@
       },
       {
         "internalType": "address",
-        "name": "from",
+        "name": "tokenIn",
         "type": "address"
       },
       {
         "internalType": "address",
-        "name": "to",
+        "name": "tokenOut",
         "type": "address"
       },
       {
@@ -902,6 +980,19 @@
     "name": "swap",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "swapRouter",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -958,7 +1049,7 @@
   },
   {
     "inputs": [],
-    "name": "wethToken",
+    "name": "weth9",
     "outputs": [
       {
         "internalType": "address",

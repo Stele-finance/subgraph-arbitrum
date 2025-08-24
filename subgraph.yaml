@@ -8,9 +8,9 @@ dataSources:
     name: Stele
     network: arbitrum-one
     source:
-      address: "0x566D1769B3f66372E94fD18F59c757BCEc6efb8a"
+      address: "0x02f8733383b261934f4dd6aca660de543f3d0f17"
       abi: Stele
-      startBlock: 367903241
+      startBlock: 371637900
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.9
@@ -21,7 +21,10 @@ dataSources:
         - RewardRatio
         - SeedMoney
         - EntryFee
-        - MaxAssets
+        - MaxTokens
+        - CreateBonusUpdated
+        - JoinBonusUpdated
+        - GetRewardsBonusUpdated
         - OwnershipTransferred
         - Create
         - Join
@@ -53,8 +56,14 @@ dataSources:
           handler: handleSeedMoney
         - event: EntryFee(uint256)
           handler: handleEntryFee
-        - event: MaxAssets(uint8)
-          handler: handleMaxAssets
+        - event: MaxTokens(uint8)
+          handler: handleMaxTokens
+        - event: CreateBonusUpdated(uint256)
+          handler: handleCreateBonusUpdated
+        - event: JoinBonusUpdated(uint256)
+          handler: handleJoinBonusUpdated
+        - event: GetRewardsBonusUpdated(uint256)
+          handler: handleGetRewardsBonusUpdated
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred
         - event: Create(uint256,uint8,uint256,uint256)
@@ -124,9 +133,9 @@ dataSources:
     name: StelePerformanceNFT
     network: arbitrum-one
     source:
-      address: "0x71c24377e7f24b6d822c9dad967ebc77c04667b5"
+      address: "0x3c18a98ebfb2b2f7f229331be1ead4dc0c3e5596"
       abi: StelePerformanceNFT
-      startBlock: 367903253
+      startBlock: 371637900
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.9
