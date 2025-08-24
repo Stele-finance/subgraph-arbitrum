@@ -8,9 +8,9 @@ dataSources:
     name: Stele
     network: arbitrum-one
     source:
-      address: "0x02f8733383b261934f4dd6aca660de543f3d0f17"
+      address: "0x2697Be05c98ed9E6Df36a32A5E6178a43BE0890f"
       abi: Stele
-      startBlock: 371637900
+      startBlock: 371693612
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.9
@@ -83,9 +83,9 @@ dataSources:
     name: SteleGovernor
     network: arbitrum-one
     source:
-      address: "0xc93fe38f52481f090e28e242b36f828c74f24142"
+      address: "0xC11133daC3A47bb320C7b2f99F72bb8BafB4470A"
       abi: SteleGovernor
-      startBlock: 367893887
+      startBlock: 371693489
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.9
@@ -133,9 +133,9 @@ dataSources:
     name: StelePerformanceNFT
     network: arbitrum-one
     source:
-      address: "0x3c18a98ebfb2b2f7f229331be1ead4dc0c3e5596"
+      address: "0x1e6cca278b522ab052bbe3140f8d455f2c454ff8"
       abi: StelePerformanceNFT
-      startBlock: 371637900
+      startBlock: 371693624
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.9

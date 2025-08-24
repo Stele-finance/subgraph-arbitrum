@@ -17,9 +17,9 @@ This project provides a GraphQL API that enables indexing and querying data from
 ## Smart Contract Addresses
 
 ### Arbitrum One Network
-- **Stele**: `0x566D1769B3f66372E94fD18F59c757BCEc6efb8a`
-- **SteleGovernor**: `0xc93fe38f52481f090e28e242b36f828c74f24142`  
-- **StelePerformanceNFT**: `0x71c24377e7f24b6d822c9dad967ebc77c04667b5`
+- **Stele**: `0x2697Be05c98ed9E6Df36a32A5E6178a43BE0890f`
+- **SteleGovernor**: `0xC11133daC3A47bb320C7b2f99F72bb8BafB4470A`  
+- **StelePerformanceNFT**: `0x1e6cca278b522ab052bbe3140f8d455f2c454ff8`
 
 ## Main Commands
 

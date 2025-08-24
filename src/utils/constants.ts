@@ -1,7 +1,7 @@
 import { BigInt, BigDecimal, Address } from '@graphprotocol/graph-ts'
 
 // arbitrum-one
-export const STELE_ADDRESS = '0x566D1769B3f66372E94fD18F59c757BCEc6efb8a'
+export const STELE_ADDRESS = '0x2697Be05c98ed9E6Df36a32A5E6178a43BE0890f'
 export const UNISWAP_V3_FACTORY = '0x1F98431c8aD98523631AE4a59f267346ea31F984'
 export const WETH = '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1'
 export const USDC = '0xaf88d065e77c8cC2239327C5EDb3A432268e5831'

@@ -1,16 +1,16 @@
 {
   "arbitrum-one": {
-    "Stele": {
-      "address": "0x566D1769B3f66372E94fD18F59c757BCEc6efb8a",
-      "startBlock": 367903241
-    },
     "SteleGovernor": {
-      "address": "0xc93fe38f52481f090e28e242b36f828c74f24142",
-      "startBlock": 367893887
+      "address": "0xC11133daC3A47bb320C7b2f99F72bb8BafB4470A",
+      "startBlock": 371693489
+    },
+    "Stele": {
+      "address": "0x2697Be05c98ed9E6Df36a32A5E6178a43BE0890f",
+      "startBlock": 371693612
     },
     "StelePerformanceNFT": {
-      "address": "0x71c24377e7f24b6d822c9dad967ebc77c04667b5",
-      "startBlock": 367903253
+      "address": "0x1e6cca278b522ab052bbe3140f8d455f2c454ff8",
+      "startBlock": 371693624
     }
   }
 }
