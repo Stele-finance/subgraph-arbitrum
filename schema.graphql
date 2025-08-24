@@ -5,7 +5,10 @@ type Stele @entity(immutable: false) {
   rewardRatio: [BigInt!]! # uint256[5]
   seedMoney: BigInt! # uint256
   entryFee: BigInt! # uint256
-  maxAssets: Int! # uint8
+  maxTokens: Int! # uint8
+  createBonus: BigInt! # uint256
+  joinBonus: BigInt! # uint256
+  getRewardsBonus: BigInt! # uint256
   challengeCounter: BigInt! # uint256
   investorCounter: BigInt! # uint256
 }
@@ -110,14 +113,14 @@ type Swap @entity(immutable: true) {
   id: Bytes!
   challengeId: BigInt! # uint256
   user: Bytes! # address
-  fromAsset: Bytes! # address
-  fromAssetSymbol: String!
-  toAsset: Bytes! # address
-  toAssetSymbol: String!
-  fromAmount: BigDecimal! # formatted amount (not raw)
-  fromPriceUSD: BigDecimal! # uint256
-  toPriceUSD: BigDecimal! # uint256
-  toAmount: BigDecimal! # formatted amount (not raw)
+  tokenIn: Bytes! # address
+  tokenInSymbol: String!
+  tokenInAmount: BigDecimal! # formatted amount (not raw)
+  tokenInPriceUSD: BigDecimal! # uint256
+  tokenOut: Bytes! # address
+  tokenOutSymbol: String!
+  tokenOutAmount: BigDecimal! # formatted amount (not raw)
+  tokenOutPriceUSD: BigDecimal! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!

@@ -4,7 +4,10 @@ import {
   Create as CreateEvent,
   EntryFee as EntryFeeEvent,
   Join as JoinEvent,
-  MaxAssets as MaxAssetsEvent,
+  MaxTokens as MaxTokensEvent,
+  CreateBonusUpdated as CreateBonusUpdatedEvent,
+  JoinBonusUpdated as JoinBonusUpdatedEvent,
+  GetRewardsBonusUpdated as GetRewardsBonusUpdatedEvent,
   OwnershipTransferred as OwnershipTransferredEvent,
   Register as RegisterEvent,
   RemoveToken as RemoveTokenEvent,
@@ -53,7 +56,10 @@ export function handleSteleCreated(event: SteleCreatedEvent): void {
     stele.seedMoney = event.params.seedMoney
     stele.entryFee = event.params.entryFee
   }
-  stele.maxAssets = event.params.maxAssets
+  stele.maxTokens = event.params.maxTokens
+  stele.createBonus = BigInt.fromI32(0)
+  stele.joinBonus = BigInt.fromI32(0)
+  stele.getRewardsBonus = BigInt.fromI32(0)
   stele.challengeCounter= BigInt.fromI32(0)
   stele.investorCounter = BigInt.fromI32(0)
   stele.save()
@@ -165,10 +171,34 @@ export function handleEntryFee(event: EntryFeeEvent): void {
   }
 }
 
-export function handleMaxAssets(event: MaxAssetsEvent): void {
+export function handleMaxTokens(event: MaxTokensEvent): void {
   let stele = Stele.load(Bytes.fromI32(0))
   if (stele != null) {
-    stele.maxAssets = event.params.newMaxAssets
+    stele.maxTokens = event.params.newMaxTokens
+    stele.save()
+  }
+}
+
+export function handleCreateBonusUpdated(event: CreateBonusUpdatedEvent): void {
+  let stele = Stele.load(Bytes.fromI32(0))
+  if (stele != null) {
+    stele.createBonus = event.params.newBonus
+    stele.save()
+  }
+}
+
+export function handleJoinBonusUpdated(event: JoinBonusUpdatedEvent): void {
+  let stele = Stele.load(Bytes.fromI32(0))
+  if (stele != null) {
+    stele.joinBonus = event.params.newBonus
+    stele.save()
+  }
+}
+
+export function handleGetRewardsBonusUpdated(event: GetRewardsBonusUpdatedEvent): void {
+  let stele = Stele.load(Bytes.fromI32(0))
+  if (stele != null) {
+    stele.getRewardsBonus = event.params.newBonus
     stele.save()
   }
 }
@@ -430,43 +460,43 @@ export function handleSwap(event: SwapEvent): void {
   let swap = new Swap(event.transaction.hash.concatI32(event.logIndex.toI32()))
   swap.challengeId = event.params.challengeId
   swap.user = event.params.user
-  swap.fromAsset = event.params.fromAsset
-  swap.fromAssetSymbol = fetchTokenSymbol(event.params.fromAsset, event.block.timestamp)
-  swap.toAsset = event.params.toAsset
-  swap.toAssetSymbol = fetchTokenSymbol(event.params.toAsset, event.block.timestamp)
+  swap.tokenIn = event.params.tokenIn
+  swap.tokenInSymbol = fetchTokenSymbol(event.params.tokenIn, event.block.timestamp)
+  swap.tokenOut = event.params.tokenOut
+  swap.tokenOutSymbol = fetchTokenSymbol(event.params.tokenOut, event.block.timestamp)
 
   // Convert raw amounts to formatted amounts
-  let fromTokenDecimals = fetchTokenDecimals(event.params.fromAsset, event.block.timestamp)
-  let toTokenDecimals = fetchTokenDecimals(event.params.toAsset, event.block.timestamp)
-  
-  if (fromTokenDecimals !== null) {
-    let decimalDivisor = exponentToBigDecimal(fromTokenDecimals)
-    let fromAmount = BigDecimal.fromString(event.params.fromAmount.toString())
+  let tokenInDecimals = fetchTokenDecimals(event.params.tokenIn, event.block.timestamp)
+  let tokenOutDecimals = fetchTokenDecimals(event.params.tokenOut, event.block.timestamp)
+
+  if (tokenInDecimals !== null) {
+    let decimalDivisor = exponentToBigDecimal(tokenInDecimals)
+    let tokenInAmount = BigDecimal.fromString(event.params.tokenInAmount.toString())
       .div(decimalDivisor)
-    swap.fromAmount = fromAmount
+    swap.tokenInAmount = tokenInAmount
   } else {
-    log.warning('[SWAP] Failed to get decimals for fromAsset: {}', [event.params.fromAsset.toHexString()])
-    swap.fromAmount = BigDecimal.fromString("0")
+    log.warning('[SWAP] Failed to get decimals for tokenIn: {}', [event.params.tokenIn.toHexString()])
+    swap.tokenInAmount = BigDecimal.fromString("0")
   }
-  
-  if (toTokenDecimals !== null) {
-    let decimalDivisor = exponentToBigDecimal(toTokenDecimals)
-    let toAmount = BigDecimal.fromString(event.params.toAmount.toString())
+
+  if (tokenOutDecimals !== null) {
+    let decimalDivisor = exponentToBigDecimal(tokenOutDecimals)
+    let toAmount = BigDecimal.fromString(event.params.tokenOutAmount.toString())
       .div(decimalDivisor)
-    swap.toAmount = toAmount
+    swap.tokenOutAmount = toAmount
   } else {
-    log.warning('[SWAP] Failed to get decimals for toAsset: {}', [event.params.toAsset.toHexString()])
-    swap.toAmount = BigDecimal.fromString("0")
+    log.warning('[SWAP] Failed to get decimals for tokenOut: {}', [event.params.tokenOut.toHexString()])
+    swap.tokenOutAmount = BigDecimal.fromString("0")
   }
   
   // Debug: Log basic swap info
-  log.info('[SWAP DEBUG] Starting swap processing: challengeId={}, user={}, fromAsset={}, toAsset={}, fromAmount={}, toAmount={}', [
+  log.info('[SWAP DEBUG] Starting swap processing: challengeId={}, user={}, tokenIn={}, tokenOut={}, tokenInAmount={}, tokenOutAmount={}', [
     event.params.challengeId.toString(),
     event.params.user.toHexString(),
-    event.params.fromAsset.toHexString(),
-    event.params.toAsset.toHexString(),
-    swap.fromAmount.toString(),
-    swap.toAmount.toString()
+    event.params.tokenIn.toHexString(),
+    event.params.tokenOut.toHexString(),
+    swap.tokenInAmount.toString(),
+    swap.tokenOutAmount.toString()
   ])  
   
   let ethPriceInUSD = getCachedEthPriceUSD(event.block.timestamp)
@@ -475,48 +505,48 @@ export function handleSwap(event: SwapEvent): void {
   log.info('[SWAP DEBUG] ETH price in USD: {}', [ethPriceInUSD.toString()])
 
   // Add missing required price fields
-  let fromTokenPriceETH = getCachedTokenPriceETH(Address.fromBytes(event.params.fromAsset), event.block.timestamp)
-  let toTokenPriceETH = getCachedTokenPriceETH(Address.fromBytes(event.params.toAsset), event.block.timestamp)
-  
+  let tokenInPriceETH = getCachedTokenPriceETH(Address.fromBytes(event.params.tokenIn), event.block.timestamp)
+  let tokenOutPriceETH = getCachedTokenPriceETH(Address.fromBytes(event.params.tokenOut), event.block.timestamp)
+
   // Debug: Log token prices in ETH
-  log.info('[SWAP DEBUG] fromToken ({}) price in ETH: {}', [
-    event.params.fromAsset.toHexString(),
-    fromTokenPriceETH ? fromTokenPriceETH.toString() : 'null'
+  log.info('[SWAP DEBUG] tokenIn ({}) price in ETH: {}', [
+    event.params.tokenIn.toHexString(),
+    tokenInPriceETH ? tokenInPriceETH.toString() : 'null'
+  ])
+
+  log.info('[SWAP DEBUG] tokenOut ({}) price in ETH: {}', [
+    event.params.tokenOut.toHexString(),
+    tokenOutPriceETH ? tokenOutPriceETH.toString() : 'null'
   ])
   
-  log.info('[SWAP DEBUG] toToken ({}) price in ETH: {}', [
-    event.params.toAsset.toHexString(),
-    toTokenPriceETH ? toTokenPriceETH.toString() : 'null'
-  ])
-  
-  // Calculate and debug fromPriceUSD
-  if (fromTokenPriceETH) {
-    let fromPriceUSDDecimal = ethPriceInUSD.times(fromTokenPriceETH)
-    log.info('[SWAP DEBUG] fromPriceUSD calculation: {} * {} = {}', [
+  // Calculate and debug tokenInPriceUSD
+  if (tokenInPriceETH) {
+    let tokenInPriceUSDDecimal = ethPriceInUSD.times(tokenInPriceETH)
+    log.info('[SWAP DEBUG] tokenInPriceUSD calculation: {} * {} = {}', [
       ethPriceInUSD.toString(),
-      fromTokenPriceETH.toString(),
-      fromPriceUSDDecimal.toString()
+      tokenInPriceETH.toString(),
+      tokenInPriceUSDDecimal.toString()
     ])
-    swap.fromPriceUSD = fromPriceUSDDecimal.truncate(5)
-    log.info('[SWAP DEBUG] Final fromPriceUSD: {}', [swap.fromPriceUSD.toString()])
+    swap.tokenInPriceUSD = tokenInPriceUSDDecimal.truncate(5)
+    log.info('[SWAP DEBUG] Final tokenInPriceUSD: {}', [swap.tokenInPriceUSD.toString()])
   } else {
-    log.warning('[SWAP DEBUG] fromTokenPriceETH is null, setting fromPriceUSD to 0', [])
-    swap.fromPriceUSD = BigDecimal.fromString("0")
+    log.warning('[SWAP DEBUG] tokenInPriceETH is null, setting tokenInPriceUSD to 0', [])
+    swap.tokenInPriceUSD = BigDecimal.fromString("0")
   }
-  
-  // Calculate and debug toPriceUSD
-  if (toTokenPriceETH) {
-    let toPriceUSDDecimal = ethPriceInUSD.times(toTokenPriceETH)
-    log.info('[SWAP DEBUG] toPriceUSD calculation: {} * {} = {}', [
+
+  // Calculate and debug tokenOutPriceUSD
+  if (tokenOutPriceETH) {
+    let tokenOutPriceUSDDecimal = ethPriceInUSD.times(tokenOutPriceETH)
+    log.info('[SWAP DEBUG] tokenOutPriceUSD calculation: {} * {} = {}', [
       ethPriceInUSD.toString(),
-      toTokenPriceETH.toString(),
-      toPriceUSDDecimal.toString()
+      tokenOutPriceETH.toString(),
+      tokenOutPriceUSDDecimal.toString()
     ])
-    swap.toPriceUSD = toPriceUSDDecimal.truncate(5)
-    log.info('[SWAP DEBUG] Final toPriceUSD: {}', [swap.toPriceUSD.toString()])
+    swap.tokenOutPriceUSD = tokenOutPriceUSDDecimal.truncate(5)
+    log.info('[SWAP DEBUG] Final tokenOutPriceUSD: {}', [swap.tokenOutPriceUSD.toString()])
   } else {
-    log.warning('[SWAP DEBUG] toTokenPriceETH is null, setting toPriceUSD to 0', [])
-    swap.toPriceUSD = BigDecimal.fromString("0")
+    log.warning('[SWAP DEBUG] tokenOutPriceETH is null, setting tokenOutPriceUSD to 0', [])
+    swap.tokenOutPriceUSD = BigDecimal.fromString("0")
   }
   
   swap.blockNumber = event.block.number
@@ -524,9 +554,9 @@ export function handleSwap(event: SwapEvent): void {
   swap.transactionHash = event.transaction.hash
   swap.save()
   
-  log.info('[SWAP DEBUG] Swap saved successfully with fromPriceUSD={}, toPriceUSD={}', [
-    swap.fromPriceUSD.toString(),
-    swap.toPriceUSD.toString()
+  log.info('[SWAP DEBUG] Swap saved successfully with tokenInPriceUSD={}, tokenOutPriceUSD={}', [
+    swap.tokenInPriceUSD.toString(),
+    swap.tokenOutPriceUSD.toString()
   ])
 
   // Update Investor and create investorSnapshot
@@ -657,8 +687,6 @@ export function handleRegister(event: RegisterEvent): void {
   register.blockTimestamp = event.block.timestamp
   register.transactionHash = event.transaction.hash
   register.save()
-
-  let ethPriceInUSD = getCachedEthPriceUSD(event.block.timestamp)
 
   let investor = Investor.load(getInvestorID(event.params.challengeId, event.params.user))
   if (investor == null) {
